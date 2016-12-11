@@ -62,6 +62,8 @@
 #include <linux/init.h>
 #include <linux/times.h>
 #include <linux/slab.h>
+#include <linux/printk.h>
+#include <linux/kern_levels.h>
 
 #include <net/net_namespace.h>
 #include <net/icmp.h>
@@ -148,6 +150,7 @@ int tcp_v4_connect(struct sock *sk, struct sockaddr *uaddr, int addr_len)
 	int err;
 	struct ip_options_rcu *inet_opt;
 
+	printk("Initiating ipv4 connection to port %u\n", (unsigned int) usin->sin_port);
 	if (addr_len < sizeof(struct sockaddr_in))
 		return -EINVAL;
 
