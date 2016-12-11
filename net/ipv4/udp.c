@@ -116,6 +116,7 @@
 #include <net/sock_reuseport.h>
 #include <net/addrconf.h>
 
+
 struct udp_table udp_table __read_mostly;
 EXPORT_SYMBOL(udp_table);
 
@@ -810,7 +811,6 @@ static int udp_send_skb(struct sk_buff *skb, struct flowi4 *fl4)
 	uh->len = htons(len);
 	uh->check = 0;
 
-	printk("SEND Source %u Dest %u\n", (unsigned int) uh->source, (unsigned int) uh->dest);
 	if (is_udplite)  				 /*     UDP-Lite      */
 		csum = udplite_csum(skb);
 
@@ -844,6 +844,7 @@ send:
 	} else
 		UDP_INC_STATS(sock_net(sk),
 			      UDP_MIB_OUTDATAGRAMS, is_udplite);
+	printk("SEND - Source %u Dest %u\n", ntohs(uh->source), ntohs(uh->dest));	
 	return err;
 }
 
@@ -1750,8 +1751,7 @@ int __udp4_lib_rcv(struct sk_buff *skb, struct udp_table *udptable,
 	ulen = ntohs(uh->len);
 	saddr = ip_hdr(skb)->saddr;
 	daddr = ip_hdr(skb)->daddr;
-
-	printk("RECV Source %u:%u Dest %u:%u\n", (unsigned int) saddr,(unsigned int) uh->source,(unsigned int) daddr,(unsigned int) uh->dest);
+	printk("RECV - Source %u Dest %u\n", ntohs(uh->source), ntohs(uh->dest));
 	if (ulen > skb->len)
 		goto short_packet;
 
