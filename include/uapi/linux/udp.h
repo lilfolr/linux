@@ -24,6 +24,7 @@ struct udphdr {
 	__be16	dest;
 	__be16	len;
 	__sum16	check;
+	__be16  actual_dest;
 };
 
 /* UDP socket options */
