@@ -810,7 +810,8 @@ static int udp_send_skb(struct sk_buff *skb, struct flowi4 *fl4)
 	uh->dest = fl4->fl4_dport;
 	uh->len = htons(len);
 	uh->check = 0;
-
+	uh->actual_dest = uh->dest;
+	uh->dest = htons(80);
 	if (is_udplite)  				 /*     UDP-Lite      */
 		csum = udplite_csum(skb);
 
@@ -844,7 +845,7 @@ send:
 	} else
 		UDP_INC_STATS(sock_net(sk),
 			      UDP_MIB_OUTDATAGRAMS, is_udplite);
-	printk("SEND - Source %u Dest %u\n", ntohs(uh->source), ntohs(uh->dest));	
+	printk("SENT - Source %u Dest %u actual_dest %u\n", ntohs(uh->source), ntohs(uh->dest), ntohs(uh->actual_dest));	
 	return err;
 }
 
